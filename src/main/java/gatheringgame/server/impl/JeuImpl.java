@@ -21,6 +21,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     public synchronized Joueur join() throws RemoteException {
         Joueur j = new JoueurImpl(50, 50);
         joueurs.put(nbJoueur, j);
+        nbJoueur++;
         return j;
     }
 
