@@ -1,6 +1,5 @@
 package gatheringgame.server;
 
-import com.univnantes.test.rmi.InformationImpl;
 import gatheringgame.server.impl.JeuImpl;
 
 import java.net.MalformedURLException;

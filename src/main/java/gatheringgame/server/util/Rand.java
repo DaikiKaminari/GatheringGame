@@ -2,14 +2,16 @@ package gatheringgame.server.util;
 
 import java.util.Random;
 
-public final class Rand {
-	private static final Random RANDINSTANCE = new Random();
+public class Rand {
+	private final Random random;
 
-	private Rand(){}
+	public Rand(){
+		this.random = new Random();
+	}
 
-	public static int randomInt(int from, int to) {
+	public int randomInt(int from, int to) {
 		if (from < to)
-			return from + RANDINSTANCE.nextInt(Math.abs(to - from));
-		return from - RANDINSTANCE.nextInt(Math.abs(to - from));
+			return from + random.nextInt(Math.abs(to - from));
+		return from - random.nextInt(Math.abs(to - from));
 	}
 }
