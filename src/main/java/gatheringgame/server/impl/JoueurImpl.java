@@ -7,8 +7,9 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class JoueurImpl extends UnicastRemoteObject implements Joueur {
 
-    private int posX;
-    private int posY;
+    public static final double SPEED = 0.2;
+    private double posX;
+    private double posY;
 
     public JoueurImpl(int x, int y) throws RemoteException {
         this.posX = x;
@@ -16,22 +17,27 @@ public class JoueurImpl extends UnicastRemoteObject implements Joueur {
     }
 
     @Override
-    public void moveX(int x) throws RemoteException {
+    public void moveX(double x) throws RemoteException {
         this.posX+=x;
     }
 
     @Override
-    public void moveY(int y) throws RemoteException {
+    public void moveY(double y) throws RemoteException {
         this.posY+=y;
     }
 
     @Override
-    public int getX() throws RemoteException {
+    public double getX() throws RemoteException {
         return posX;
     }
 
     @Override
-    public int getY() throws RemoteException {
+    public double getY() throws RemoteException {
         return posY;
+    }
+
+    @Override
+    public double getSpeed() throws RemoteException {
+        return SPEED;
     }
 }

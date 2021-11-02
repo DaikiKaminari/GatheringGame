@@ -6,8 +6,6 @@ import gatheringgame.server.Joueur;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.List;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 
 public class Display extends Canvas {
@@ -38,7 +36,6 @@ public class Display extends Canvas {
         resetAffichage(g);
         afficherJoueurs(g);
         g.setColor(Color.BLACK);
-        g.drawOval(10, 10, 50, 200);
 
         g.dispose();
         buffer.show();
@@ -63,6 +60,6 @@ public class Display extends Canvas {
 
     private void afficherJoueur(Graphics g, Joueur joueur) throws RemoteException {
         g.setColor(Color.blue);
-        g.drawRect(joueur.getX(), joueur.getY(), 30, 30);
+        g.drawRect((int)joueur.getX(), (int)joueur.getY(), 30, 30);
     }
 }
