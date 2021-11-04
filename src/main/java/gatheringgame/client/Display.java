@@ -102,7 +102,6 @@ public class Display extends Canvas {
         int espaceDemandes = 40;
         int espaceObjets = 40;
 
-        System.out.println(demandeEquipeUn);
         for(int i = 0; i < demandeEquipeUn.size(); i++) {
             Item item = demandeEquipeUn.get(i);
             switch(item) {
