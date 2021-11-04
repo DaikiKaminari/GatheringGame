@@ -5,6 +5,8 @@ import gatheringgame.server.Position;
 import gatheringgame.server.Resource;
 import gatheringgame.server.util.Rand;
 
+import java.rmi.RemoteException;
+
 public class GeneratorImpl implements Generator {
 	Position minPos;
 	Position maxPos;
@@ -23,7 +25,7 @@ public class GeneratorImpl implements Generator {
 	}
 
 	@Override
-	public Resource randomResource() {
+	public Resource randomResource() throws RemoteException {
 		Position pos = new PositionImpl(
 				rand.randomInt(minPos.getX(), maxPos.getY()),
 				rand.randomInt(minPos.getY(), maxPos.getY())

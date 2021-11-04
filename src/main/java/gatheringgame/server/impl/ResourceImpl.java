@@ -3,6 +3,8 @@ package gatheringgame.server.impl;
 import gatheringgame.server.Position;
 import gatheringgame.server.Resource;
 
+import java.rmi.RemoteException;
+
 public class ResourceImpl implements Resource {
 	private final Item item;
 	private final Position position;
@@ -13,12 +15,12 @@ public class ResourceImpl implements Resource {
 	}
 
 	@Override
-	public String getName() {
+	public String getName() throws RemoteException {
 		return item.getName();
 	}
 
 	@Override
-	public Position getPosition() {
+	public Position getPosition() throws RemoteException {
 		return position;
 	}
 }

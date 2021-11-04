@@ -1,6 +1,9 @@
 package gatheringgame.server;
 
-public interface Resource {
-	String getName();
-	Position getPosition();
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface Resource extends Remote {
+	String getName() throws RemoteException;
+	Position getPosition() throws RemoteException;
 }

@@ -1,9 +1,10 @@
 package gatheringgame.server.impl;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-public enum Item {
+public enum Item implements Serializable {
 	SCREW("Screw"),
 	GEAR("Gear"),
 	BOLT("Bolt");
