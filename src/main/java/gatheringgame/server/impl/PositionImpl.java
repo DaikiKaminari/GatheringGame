@@ -3,8 +3,9 @@ package gatheringgame.server.impl;
 import gatheringgame.server.Position;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class PositionImpl implements Position {
+public class PositionImpl extends UnicastRemoteObject implements Position {
 	int x;
 	int y;
 

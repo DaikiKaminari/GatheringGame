@@ -23,4 +23,9 @@ public class ResourceImpl implements Resource {
 	public Position getPosition() throws RemoteException {
 		return position;
 	}
+
+	@Override
+	public Item getItem() {
+		return this.item;
+	}
 }
