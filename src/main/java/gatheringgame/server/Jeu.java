@@ -10,4 +10,6 @@ public interface Jeu extends Remote {
     public Usine getUsine() throws RemoteException;
     public List<Resource> getResources() throws RemoteException;
     public void ajouterResource() throws RemoteException;
+    public boolean aCommence() throws RemoteException;
+    public int getNbJoueur() throws RemoteException;
 }

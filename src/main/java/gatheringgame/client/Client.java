@@ -2,6 +2,7 @@ package gatheringgame.client;
 
 import gatheringgame.server.Jeu;
 import gatheringgame.server.Joueur;
+import gatheringgame.server.Matchmaking;
 import gatheringgame.server.Server;
 
 import javax.naming.ldap.Control;
@@ -29,8 +30,15 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Jeu jeu = (Jeu) Naming.lookup(Server.URL+"/jeuImpl");
+            Matchmaking matchmaking = (Matchmaking) Naming.lookup(Server.URL+"/jeuImpl");
+            Jeu jeu = matchmaking.getJeu();
             Joueur j = jeu.join();
+
+            while(j == null) { // Si notre joueur est réfusé car plus de place, alors on essaie à nouveau de trouver une nouvelle partie et de la rejoindre.
+                jeu = matchmaking.getJeu();
+                j = jeu.join();
+            }
+
             Display d = new Display(jeu);
             Window window = new Window(d);
 
@@ -58,10 +66,16 @@ public class Client {
             e.printStackTrace();
         } catch (RemoteException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void updateGame() throws RemoteException {
+
+        if(!jeu.aCommence()) // ne rien faire si la partie n'a pas commencé
+            return;
+
         if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.DROITE)) {
             joueur.moveX(joueur.getSpeed() * this.elapsed);
         } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.GAUCHE)) {

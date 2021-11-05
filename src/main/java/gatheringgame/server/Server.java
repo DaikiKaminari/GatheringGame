@@ -1,6 +1,7 @@
 package gatheringgame.server;
 
 import gatheringgame.server.impl.JeuImpl;
+import gatheringgame.server.impl.MatchmakingImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -13,9 +14,9 @@ public class Server {
     public static void main(String[] args) {
         try {
             LocateRegistry.createRegistry(PORT);
-            JeuImpl jeu = new JeuImpl();
+            Matchmaking matchmaking = new MatchmakingImpl();
             System.out.println("Enregistrement de l'objet avec l'url : " + URL + "/jeuImpl");
-            Naming.rebind(URL + "/jeuImpl", jeu);
+            Naming.rebind(URL + "/jeuImpl", matchmaking);
 
             System.out.println("Serveur lancé");
         } catch (RemoteException e) {

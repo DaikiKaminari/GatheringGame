@@ -1,9 +1,6 @@
 package gatheringgame.client;
 
-import gatheringgame.server.Jeu;
-import gatheringgame.server.Joueur;
-import gatheringgame.server.Resource;
-import gatheringgame.server.Usine;
+import gatheringgame.server.*;
 import gatheringgame.server.impl.Item;
 
 import javax.swing.*;
@@ -53,18 +50,29 @@ public class Display extends Canvas {
         resetAffichage(g);
 
 
-        /**
-         * Affichage des élements du jeu
-         */
-        afficherUsine(g, this.jeu.getUsine());
-        afficherJoueurs(g);
 
+
+        if(!jeu.aCommence()) {
+            this.afficherAttente(g);
+        } else {
+
+            afficherUsine(g, this.jeu.getUsine());
+            afficherJoueurs(g);
+
+
+        }
 
 
         g.setColor(Color.BLACK);
 
         g.dispose();
         buffer.show();
+    }
+
+    private void afficherAttente(Graphics g) throws RemoteException {
+        g.setColor(Color.red);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("ATTENTE DE JOUEURS : " + jeu.getNbJoueur() +  " / " + Matchmaking.NB_MAX_JOUEUR, 250, 260);
     }
 
     private void resetAffichage(Graphics g) {
