@@ -12,4 +12,9 @@ public interface Jeu extends Remote {
     public void ajouterResource() throws RemoteException;
     public boolean aCommence() throws RemoteException;
     public int getNbJoueur() throws RemoteException;
+    public int getSecondesRestantes() throws RemoteException;
+
+    public void finir() throws RemoteException;
+    public boolean estFini() throws RemoteException;
+    public Equipe equipeGagnante() throws RemoteException;
 }

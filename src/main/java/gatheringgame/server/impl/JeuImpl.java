@@ -14,6 +14,8 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private Equipe equipeDeux;
     private Usine usine;
     private boolean started;
+    private boolean isFinished;
+    private StoppableCountdown countdown;
 
     public JeuImpl() throws Exception {
         nbJoueur = 0;
@@ -23,8 +25,12 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
+        countdown = new StoppableCountdownImpl(10, this); // 2 minutes
 
         this.started = false;
+        this.isFinished = false;
+
+        // this.commenceJeu(); // Pour débugger
     }
 
     @Override
@@ -74,7 +80,36 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         return this.nbJoueur;
     }
 
+    @Override
+    public int getSecondesRestantes() throws RemoteException {
+        return this.countdown.getSecondesRestantes();
+    }
+
+    @Override
+    public void finir() {
+        this.isFinished = true;
+    }
+
+    @Override
+    public boolean estFini() throws RemoteException {
+        return this.isFinished;
+    }
+
+    @Override
+    public Equipe equipeGagnante() throws RemoteException {
+        if(equipeUn.getScore() > equipeDeux.getScore()) {
+            return equipeUn;
+        } else {
+            if(equipeUn.getScore() == equipeDeux.getScore()) {
+                return null;
+            } else {
+                return equipeDeux;
+            }
+        }
+    }
+
     private void commenceJeu() {
         this.started = true;
+        this.countdown.start();
     }
 }

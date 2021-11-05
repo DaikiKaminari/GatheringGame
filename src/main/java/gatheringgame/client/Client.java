@@ -76,6 +76,9 @@ public class Client {
         if(!jeu.aCommence()) // ne rien faire si la partie n'a pas commencé
             return;
 
+        if(jeu.estFini())
+            return;
+
         if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.DROITE)) {
             joueur.moveX(joueur.getSpeed() * this.elapsed);
         } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.GAUCHE)) {

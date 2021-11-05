@@ -52,22 +52,43 @@ public class Display extends Canvas {
 
 
 
-        if(!jeu.aCommence()) {
+        if(!jeu.aCommence()) { 
             this.afficherAttente(g);
-        } else {
+        } else if(jeu.estFini()) {
+            this.afficherResultat(g);
+        } else  {
 
             afficherUsine(g, this.jeu.getUsine());
             afficherJoueurs(g);
-
+            afficherCompteARebours(g);
 
         }
-
 
         g.setColor(Color.BLACK);
 
         g.dispose();
         buffer.show();
     }
+
+    private void afficherResultat(Graphics g) throws RemoteException {
+        g.setColor(Color.red);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        Equipe gagnante = jeu.equipeGagnante();
+        if(gagnante == null) {
+            g.drawString("EGALITE", 250, 260);
+        } else if(gagnante.getNumero() == 1) {
+            g.drawString("L'EQUIPE GAGNANTE EST BLEUE AVEC " + gagnante.getScore() + " POINTS !", 250, 260);
+        } else if(gagnante.getNumero() == 2) {
+            g.drawString("L'EQUIPE GAGNANTE EST ROUGE AVEC " + gagnante.getScore() + " POINTS !", 250, 260);
+        }
+    }
+
+    private void afficherCompteARebours(Graphics g) throws RemoteException {
+        g.setColor(Color.red);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("secondes restantes : " + jeu.getSecondesRestantes(), 250, 50);
+    }
+
 
     private void afficherAttente(Graphics g) throws RemoteException {
         g.setColor(Color.red);
