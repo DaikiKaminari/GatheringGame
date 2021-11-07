@@ -21,9 +21,9 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
     Jeu jeu;
 
     UsineImpl(Jeu jeu) throws RemoteException {
-        demandes = new HashMap<>();
+        this.demandes = new HashMap<>();
         this.jeu = jeu;
-        position = new PositionImpl(DEFAULT_X_POS, DEFAULT_Y_POS);
+        this.position = new PositionImpl(DEFAULT_X_POS, DEFAULT_Y_POS);
     }
 
 
@@ -34,32 +34,32 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
      * Si le joueur a un objet et qu'il correspond à la demande, alors le joueur donne son objet à l'usine. Si la demande est satisfaite, l'équipe gagne un point
      *
      * @param j
+     * @return true si une partie de la demande a été satisfaite (objet consommé), false sinon
      * @throws Exception
      * @throws RemoteException
      */
     @Override
-    public synchronized void satisfaireDemande(Joueur j) throws Exception, RemoteException {
+    public synchronized boolean satisfaireDemande(Joueur j) throws RemoteException {
         Equipe equipe = j.getEquipe();
         Item item = j.getItem();
         List<Item> demande = this.getDemande(equipe);
 
         if(item == null)
-            return;
+            return false;
 
         // Si l'objet correspond bien au premier objet demandé, alors il faut enlever l'objet de la demande et vider l'inventaire du joueur
         if(demande.get(0).getName().equals(item.getName())) {
             demande.remove(0);
             j.viderInventaire();
 
-
-
             // Si la demande est entièrement satisfaite, incrémenter le score de l'équipe du joueur, et génerer une nouvelle demande pour l'équipe
             if(demande.isEmpty()) {
                 equipe.incrScore();
                 this.demandes.put(equipe, this.genererDemande());
             }
+            return true;
         }
-
+        return false;
     }
 
     @Override
@@ -74,7 +74,12 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
                 return this.getDemande(e);
             }
         }
-        return null;
+        return new ArrayList<>();
+    }
+
+    @Override
+    public Position getPosition() throws RemoteException {
+        return this.position;
     }
 
     @Override
@@ -91,9 +96,4 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
         return demande;
     }
 
-
-    @Override
-    public Position getPosition() throws RemoteException {
-        return this.position;
-    }
 }

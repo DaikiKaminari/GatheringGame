@@ -6,7 +6,6 @@ import gatheringgame.server.impl.Item;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.rmi.Remote;
 import java.util.List;
 import java.rmi.RemoteException;
 
@@ -119,11 +118,12 @@ public class Display extends Canvas {
         } else {
             g.setColor(Color.red);
         }
-        g.drawRect((int)joueur.getX(), (int)joueur.getY(), 30, 30);
+        int pR = (int)((double)jeu.getConfig().get("radiusPlayer"));
+        g.drawRect((int)joueur.getPos().getX()-pR, (int)joueur.getPos().getY()-pR, pR*2, pR*2);
     }
 
     private void afficherUsine(Graphics g, Usine usine) throws RemoteException {
-        g.drawImage(this.usineSprite, usine.getPosition().getX(), usine.getPosition().getY(), this);
+        g.drawImage(this.usineSprite, (int)usine.getPosition().getX(), (int)usine.getPosition().getY(), this);
 
         List<Item> demandeEquipeUn = usine.getDemande(1);
         List<Item> demandeEquipeDeux = usine.getDemande(2);
@@ -135,13 +135,13 @@ public class Display extends Canvas {
             Item item = demandeEquipeUn.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
                     break;
 
             }
@@ -150,13 +150,13 @@ public class Display extends Canvas {
             Item item = demandeEquipeDeux.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, usine.getPosition().getX() + i * espaceObjets, usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
                     break;
             }
         }

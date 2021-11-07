@@ -5,7 +5,6 @@ import gatheringgame.server.Joueur;
 import gatheringgame.server.Matchmaking;
 import gatheringgame.server.Server;
 
-import javax.naming.ldap.Control;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -32,7 +31,10 @@ public class Client {
         try {
             Matchmaking matchmaking = (Matchmaking) Naming.lookup(Server.URL+"/jeuImpl");
             Jeu jeu = matchmaking.getJeu();
-            Joueur j = jeu.join();
+            Joueur j = jeu.join(); // 1er joueur
+            jeu.join(); // 2ème joueur TEST
+            jeu.join(); // 3ème joueur TEST
+            jeu.join(); // 4ème joueur TEST
 
             while(j == null) { // Si notre joueur est réfusé car plus de place, alors on essaie à nouveau de trouver une nouvelle partie et de la rejoindre.
                 jeu = matchmaking.getJeu();
@@ -87,6 +89,8 @@ public class Client {
             joueur.moveY(- joueur.getSpeed() * this.elapsed);
         } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.BAS)) {
             joueur.moveY(joueur.getSpeed() * this.elapsed);
+        } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
+            joueur.interraction();
         }
     }
 

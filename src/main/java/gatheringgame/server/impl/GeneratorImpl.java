@@ -27,8 +27,8 @@ public class GeneratorImpl implements Generator {
 	@Override
 	public Resource randomResource() throws RemoteException {
 		Position pos = new PositionImpl(
-				rand.randomInt(minPos.getX(), maxPos.getY()),
-				rand.randomInt(minPos.getY(), maxPos.getY())
+				rand.randomInt((int)minPos.getX(), (int)maxPos.getY()),
+				rand.randomInt((int)minPos.getY(), (int)maxPos.getY())
 		);
 		return (new ResourceImpl(Item.randomItem(), pos));
 	}

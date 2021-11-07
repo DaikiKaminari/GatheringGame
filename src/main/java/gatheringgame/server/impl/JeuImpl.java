@@ -1,7 +1,10 @@
 package gatheringgame.server.impl;
 
+import com.google.gson.Gson;
 import gatheringgame.server.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -13,11 +16,19 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private Equipe equipeUn;
     private Equipe equipeDeux;
     private Usine usine;
+    private List<Resource> ressources; // TODO
     private boolean started;
     private boolean isFinished;
     private StoppableCountdown countdown;
 
+    private static Map<?, ?> config;
+
     public JeuImpl() throws Exception {
+        config = new Gson().fromJson(
+                Files.newBufferedReader(Paths.get("src/main/java/gatheringgame/config.json")),
+                Map.class
+        );
+
         nbJoueur = 0;
         joueurs = new HashMap<Integer, Joueur>();
         equipeUn = new EquipeImpl(1);
@@ -39,7 +50,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         if(nbJoueur==Matchmaking.NB_MAX_JOUEUR)
             return null;
 
-        Joueur j = new JoueurImpl(50, 50, nbJoueur % 2 == 0 ? equipeUn : equipeDeux);
+        Joueur j = new JoueurImpl(50, 50, nbJoueur % 2 == 0 ? equipeUn : equipeDeux, this);
         joueurs.put(nbJoueur, j);
         nbJoueur++;
 
@@ -51,7 +62,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     @Override
     public List<Joueur> getJoueurs() throws RemoteException {
-        return new ArrayList<Joueur>(joueurs.values());
+        return new ArrayList<>(joueurs.values());
     }
 
     @Override
@@ -86,6 +97,11 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     }
 
     @Override
+    public Map<?, ?> getConfig() throws RemoteException {
+        return config;
+    }
+
+    @Override
     public void finir() {
         this.isFinished = true;
     }
@@ -111,5 +127,48 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private void commenceJeu() {
         this.started = true;
         this.countdown.start();
+    }
+
+    /**
+     * Le joueur tente de ramasser la ressource sur laquelle il se trouve
+     * @param j
+     * @return true si il a réussi à prendre une ressource, false sinon
+     * @throws RemoteException
+     */
+    @Override
+    public boolean veutRamasser(Joueur j) throws RemoteException {
+        double maxRadiusPlayerPickupResource = (double) config.get("radiusPlayer");
+        for (Resource r : ressources) {
+            if (Position.isOverlapping(j.getPos(), r.getPos(), maxRadiusPlayerPickupResource)) {
+                j.prendreResource(r);
+                ressources.remove(r);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Le joueur tente de déposer la ressource qu'il a dans son inventaire, soit à l'usine, soit au sol.
+     * @param j Joueur souhaitant déposer la ressource
+     * @return true si l'objet a bien été déposé, false sinon
+     * @throws Exception
+     */
+
+    @Override
+    public boolean veutDeposer(Joueur j) throws RemoteException {
+        double maxRadiusPlayerPickupResource = (double) config.get("radiusPlayer");
+        if (j.getItem() == null) {
+            return false;
+        }
+        if (Position.isOverlapping(j.getPos(), usine.getPosition(), maxRadiusPlayerPickupResource)) {
+            // tente de donner l'item à l'usine pour compléter la tâche
+            return usine.satisfaireDemande(j);
+        } else {
+            // relâche l'item au sol
+            ressources.add(new ResourceImpl(j.getItem(), j.getPos().clonePos()));
+            j.viderInventaire();
+            return true;
+        }
     }
 }

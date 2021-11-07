@@ -20,7 +20,7 @@ public class ResourceImpl implements Resource {
 	}
 
 	@Override
-	public Position getPosition() throws RemoteException {
+	public Position getPos() throws RemoteException {
 		return position;
 	}
 
