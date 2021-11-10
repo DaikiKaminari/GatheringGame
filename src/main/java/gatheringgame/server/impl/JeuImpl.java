@@ -15,11 +15,14 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private Map<Integer, Joueur> joueurs;
     private Equipe equipeUn;
     private Equipe equipeDeux;
+    private final Position minPos;
+    private final Position maxPos;
     private Usine usine;
-    private List<Resource> ressources; // TODO
+    private final List<Resource> ressources;
     private boolean started;
     private boolean isFinished;
     private StoppableCountdown countdown;
+    private final Generator resourceGenerator;
 
     private static Map<?, ?> config;
 
@@ -33,10 +36,14 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         joueurs = new HashMap<Integer, Joueur>();
         equipeUn = new EquipeImpl(1);
         equipeDeux = new EquipeImpl(2);
+        minPos = new PositionImpl((double)config.get("mapMinX"), (double)config.get("mapMinY"));
+        maxPos = new PositionImpl((double)config.get("mapMaxX"), (double)config.get("mapMaxY"));
+        ressources = new ArrayList<>();
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
         countdown = new StoppableCountdownImpl(10, this); // 2 minutes
+        resourceGenerator = new GeneratorImpl(this, minPos, maxPos);
 
         this.started = false;
         this.isFinished = false;
@@ -57,6 +64,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         if(nbJoueur == Matchmaking.NB_MAX_JOUEUR) {
             this.commenceJeu();
         }
+        resourceGenerator.run();
         return j;
     }
 
@@ -72,13 +80,22 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     @Override
     public List<Resource> getResources() throws RemoteException {
-        //TODO
-        return null;
+        return ressources;
     }
 
     @Override
-    public synchronized void ajouterResource() throws RemoteException {
-        //TODO Appelé périodiquement par un thread de génération de ressource
+    public void ajouterResource(Resource resource) throws RemoteException {
+        synchronized (ressources) {
+            this.ressources.add(resource);
+        }
+    }
+
+    @Override
+    public void retirerResource(Resource resource) throws RemoteException {
+        synchronized (ressources) {
+            this.ressources.remove(resource);
+            // notifyAll();
+        }
     }
 
     @Override
@@ -138,11 +155,13 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     @Override
     public boolean veutRamasser(Joueur j) throws RemoteException {
         double maxRadiusPlayerPickupResource = (double) config.get("radiusPlayer");
-        for (Resource r : ressources) {
-            if (Position.isOverlapping(j.getPos(), r.getPos(), maxRadiusPlayerPickupResource)) {
-                j.prendreResource(r);
-                ressources.remove(r);
-                return true;
+        synchronized (ressources) {
+            for (Resource r : ressources) {
+                if (Position.isOverlapping(j.getPos(), r.getPos(), maxRadiusPlayerPickupResource)) {
+                    j.prendreResource(r);
+                    retirerResource(r);
+                    return true;
+                }
             }
         }
         return false;
@@ -166,7 +185,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
             return usine.satisfaireDemande(j);
         } else {
             // relâche l'item au sol
-            ressources.add(new ResourceImpl(j.getItem(), j.getPos().clonePos()));
+            ajouterResource(new ResourceImpl(j.getItem(), j.getPos().clonePos()));
             j.viderInventaire();
             return true;
         }

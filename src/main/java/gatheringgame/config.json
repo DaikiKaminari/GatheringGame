@@ -1,3 +1,8 @@
 {
-  "radiusPlayer": 15
+  "radiusPlayer": 15,
+  "maxResourcesEachType" : 3,
+  "mapMinX" : 100,
+  "mapMaxX" : 500,
+  "mapMinY" : 100,
+  "mapMaxY" : 500
 }

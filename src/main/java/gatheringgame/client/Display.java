@@ -50,7 +50,6 @@ public class Display extends Canvas {
 
 
 
-
         if(!jeu.aCommence()) { 
             this.afficherAttente(g);
         } else if(jeu.estFini()) {
@@ -60,6 +59,7 @@ public class Display extends Canvas {
             afficherUsine(g, this.jeu.getUsine());
             afficherJoueurs(g);
             afficherCompteARebours(g);
+            afficherRessources(g, jeu.getResources());
 
         }
 
@@ -143,7 +143,6 @@ public class Display extends Canvas {
                 case GEAR:
                     g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
                     break;
-
             }
         }
         for(int i = 0; i < demandeEquipeDeux.size(); i++) {
@@ -163,7 +162,24 @@ public class Display extends Canvas {
 
     }
 
-    private void afficherResources(List<Resource> resources) throws RemoteException {
-        // TODO, afficher les ressoruces selon leurs labels, à la bonne position
+    private void afficherRessource(Graphics g, Resource resource) throws RemoteException {
+        Item item = resource.getItem();
+        switch(item) {
+            case SCREW:
+                g.drawImage(this.screwSprite, (int)resource.getPos().getX(), (int)resource.getPos().getY(), this);
+                break;
+            case BOLT:
+                g.drawImage(this.boltSprite, (int)resource.getPos().getX(), (int)resource.getPos().getY(), this);
+                break;
+            case GEAR:
+                g.drawImage(this.gearSprite, (int)resource.getPos().getX(), (int)resource.getPos().getY(), this);
+                break;
+        }
+    }
+
+    private void afficherRessources(Graphics g, List<Resource> resources) throws RemoteException {
+        for (Resource r : resources) {
+            afficherRessource(g, r);
+        }
     }
 }

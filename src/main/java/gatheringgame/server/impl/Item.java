@@ -10,9 +10,10 @@ public enum Item implements Serializable {
 	BOLT("Bolt");
 
 	private final String name;
-	private static final List<Item> ITEMS = List.of(values());
-	private static final int SIZE = ITEMS.size();
 	private static final Random rand = new Random();
+
+	public static final List<Item> ITEMS = List.of(values());
+	public static final int SIZE = ITEMS.size();
 
 	private Item(String name) {
 		this.name = name;
@@ -25,5 +26,4 @@ public enum Item implements Serializable {
 	public static Item randomItem() {
 		return ITEMS.get(rand.nextInt(SIZE));
 	}
-
 }
