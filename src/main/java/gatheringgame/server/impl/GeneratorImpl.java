@@ -9,7 +9,7 @@ import gatheringgame.server.util.Rand;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class GeneratorImpl extends Thread implements Generator {
+public class GeneratorImpl extends Thread implements Generator  {
 	Jeu jeu;
 	Position minPos;
 	Position maxPos;

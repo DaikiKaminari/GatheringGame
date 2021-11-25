@@ -32,9 +32,9 @@ public class Client {
             Matchmaking matchmaking = (Matchmaking) Naming.lookup(Server.URL+"/jeuImpl");
             Jeu jeu = matchmaking.getJeu();
             Joueur j = jeu.join(); // 1er joueur
-            jeu.join(); // 2ème joueur TEST
-            jeu.join(); // 3ème joueur TEST
-            jeu.join(); // 4ème joueur TEST
+            // jeu.join(); // 2ème joueur TEST
+            // jeu.join(); // 3ème joueur TEST
+            // jeu.join(); // 4ème joueur TEST
 
             while(j == null) { // Si notre joueur est réfusé car plus de place, alors on essaie à nouveau de trouver une nouvelle partie et de la rejoindre.
                 jeu = matchmaking.getJeu();

@@ -4,12 +4,14 @@ import gatheringgame.server.Position;
 import gatheringgame.server.Resource;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class ResourceImpl implements Resource {
+public class ResourceImpl extends UnicastRemoteObject implements Resource {
 	private final Item item;
 	private final Position position;
 
-	public ResourceImpl(Item item, Position position) {
+	public ResourceImpl(Item item, Position position) throws RemoteException {
+		super();
 		this.item = item;
 		this.position = position;
 	}

@@ -22,7 +22,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private boolean started;
     private boolean isFinished;
     private StoppableCountdown countdown;
-    private final Generator resourceGenerator;
+    private final GeneratorImpl resourceGenerator;
 
     private static Map<?, ?> config;
 
@@ -64,7 +64,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         if(nbJoueur == Matchmaking.NB_MAX_JOUEUR) {
             this.commenceJeu();
         }
-        resourceGenerator.run();
+
         return j;
     }
 
@@ -143,6 +143,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     private void commenceJeu() {
         this.started = true;
+        resourceGenerator.start();
         this.countdown.start();
     }
 
