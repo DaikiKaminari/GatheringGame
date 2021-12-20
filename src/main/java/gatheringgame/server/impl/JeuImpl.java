@@ -95,7 +95,6 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     public void retirerResource(Resource resource) throws RemoteException {
         synchronized (ressources) {
             this.ressources.remove(resource);
-            // notifyAll();
         }
     }
 

@@ -25,22 +25,30 @@ public interface Position extends Remote {
 
 
 	static boolean isOverlapping(Position player, Position resource, int sizePlayer, int sizeObject) throws RemoteException {
-		Position playerMax = new PositionImpl(player.getX() + sizePlayer, player.getX() + sizePlayer);
+		Position playerMax = new PositionImpl(player.getX() + sizePlayer, player.getY() + sizePlayer);
 		List<Position> resourcePoints = Arrays.asList(
 				resource,
 				new PositionImpl(resource.getX() + sizeObject, resource.getY()),
 				new PositionImpl(resource.getX(), resource.getY() + sizeObject),
 				new PositionImpl(resource.getX() + sizeObject, resource.getY() + sizeObject)
 		);
-		int pointsInner = 0;
-		int pointsOutside = 0;
 		for (Position point : resourcePoints) {
 			if (isPointInnerRectangle(point, player, playerMax)) {
-				pointsInner++;
-			} else {
-				pointsOutside++;
+				return true;
 			}
 		}
-		return pointsInner > 0 && pointsOutside > 0;
+		Position objectMax = new PositionImpl(resource.getX() + sizeObject, resource.getY() + sizeObject);
+		List<Position> playerPoints = Arrays.asList(
+				player,
+				new PositionImpl(player.getX() + sizePlayer, player.getY()),
+				new PositionImpl(player.getX(), player.getY() + sizePlayer),
+				new PositionImpl(player.getX() + sizePlayer, player.getY() + sizePlayer)
+		);
+		for (Position point : playerPoints) {
+			if (isPointInnerRectangle(point, resource, objectMax)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
