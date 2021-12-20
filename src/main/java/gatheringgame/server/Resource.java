@@ -17,16 +17,21 @@ public interface Resource extends Remote {
 		if (resources.isEmpty()) return Item.randomItem();
 
 		Map<Item, Integer> occurrences = new EnumMap<>(Item.class);
+		for(Item i : Item.values()) {
+			occurrences.put(i, 0);
+		}
+
 		try {
 			for (Resource resource : resources) {
 				Item it = resource.getItem();
-				int count = occurrences.containsKey(it) ? occurrences.get(it) + 1 : 0;
+				int count = occurrences.get(it) + 1;
 				occurrences.put(it, count);
 			}
 		} catch (RemoteException e) {
 			// N'est pas censé arriver car c'est une méthode exécutée uniquement côté serveur
 			e.printStackTrace();
 		}
+
 		Map.Entry<Item, Integer> minOccurence = Collections.min(occurrences.entrySet(),
 				Map.Entry.comparingByValue());
 		return minOccurence.getKey();

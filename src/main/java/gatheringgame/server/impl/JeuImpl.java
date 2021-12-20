@@ -42,7 +42,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
-        countdown = new StoppableCountdownImpl(10, this); // 2 minutes
+        countdown = new StoppableCountdownImpl(60, this); // 2 minutes
         resourceGenerator = new GeneratorImpl(this, minPos, maxPos);
 
         this.started = false;

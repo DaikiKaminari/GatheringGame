@@ -50,13 +50,13 @@ public class GeneratorImpl extends Thread implements Generator  {
 	@Override
 	public void run() {
 		try {
-			synchronized (jeu.getResources()) {
-				final int maxResourceEachType = (int) ((double) jeu.getConfig().get("maxResourcesEachType"));
-				while (!this.isInterrupted()) {
-					while (maxResourceEachType * Item.SIZE <= jeu.getResources().size()) {
-						sleep(1000);
-						// jeu.getResources().wait();
-					}
+			final int maxResourceEachType = (int) ((double) jeu.getConfig().get("maxResourcesEachType"));
+			while (!this.isInterrupted()) {
+				while (maxResourceEachType * Item.SIZE <= jeu.getResources().size()) {
+					sleep(1000);
+					// jeu.getResources().wait();
+				}
+				synchronized (jeu.getResources()) {
 					Item it = Resource.leastOccurrenceItem(jeu.getResources());
 					jeu.ajouterResource(pseudoRandomResource(it));
 				}
