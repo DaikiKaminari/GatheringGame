@@ -28,7 +28,6 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
 
 
     /**
-     *
      * satisfait une demande d'un objet lorsqu'un joueur transporte un objet.
      * Si le joueur n'a pas d'objet, la méthode ne fait rien.
      * Si le joueur a un objet et qu'il correspond à la demande, alors le joueur donne son objet à l'usine. Si la demande est satisfaite, l'équipe gagne un point
@@ -44,16 +43,16 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
         Item item = j.getItem();
         List<Item> demande = this.getDemande(equipe);
 
-        if(item == null)
+        if (item == null)
             return false;
 
         // Si l'objet correspond bien au premier objet demandé, alors il faut enlever l'objet de la demande et vider l'inventaire du joueur
-        if(demande.get(0).getName().equals(item.getName())) {
+        if (demande.get(0).getName().equals(item.getName())) {
             demande.remove(0);
             j.viderInventaire();
 
             // Si la demande est entièrement satisfaite, incrémenter le score de l'équipe du joueur, et génerer une nouvelle demande pour l'équipe
-            if(demande.isEmpty()) {
+            if (demande.isEmpty()) {
                 equipe.incrScore();
                 this.demandes.put(equipe, this.genererDemande());
             }
@@ -69,8 +68,8 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
 
     @Override
     public List<Item> getDemande(int equipe) throws RemoteException {
-        for(Equipe e : this.demandes.keySet()){
-            if(e.getNumero() == equipe) {
+        for (Equipe e : this.demandes.keySet()) {
+            if (e.getNumero() == equipe) {
                 return this.getDemande(e);
             }
         }
@@ -89,7 +88,7 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
 
     private List<Item> genererDemande() {
         List<Item> demande = new ArrayList<>(NB_RESOURCE_DEMANDE);
-        for(int i = 0; i < NB_RESOURCE_DEMANDE; i++) {
+        for (int i = 0; i < NB_RESOURCE_DEMANDE; i++) {
             demande.add(Item.randomItem());
         }
 

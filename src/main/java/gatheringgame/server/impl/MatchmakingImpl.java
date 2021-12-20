@@ -3,7 +3,6 @@ package gatheringgame.server.impl;
 import gatheringgame.server.Jeu;
 import gatheringgame.server.Matchmaking;
 
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +10,8 @@ import java.util.Map;
 public class MatchmakingImpl extends UnicastRemoteObject implements Matchmaking {
 
 
-
-
+    private final Map<Integer, Jeu> jeux;
     private int nbJeu;
-    private Map<Integer, Jeu> jeux;
 
     public MatchmakingImpl() throws Exception {
         jeux = new HashMap<>();
@@ -23,17 +20,16 @@ public class MatchmakingImpl extends UnicastRemoteObject implements Matchmaking 
     }
 
     /**
-     *
      * @return le jeu
      * @throws Exception
      */
     @Override
     public synchronized Jeu getJeu() throws Exception {
         Jeu jeu;
-        if(jeux.get(nbJeu-1).aCommence()) {
+        if (jeux.get(nbJeu - 1).aCommence()) {
             jeu = this.creerJeu();
         } else {
-            jeu = jeux.get(nbJeu-1);
+            jeu = jeux.get(nbJeu - 1);
         }
 
         return jeu;

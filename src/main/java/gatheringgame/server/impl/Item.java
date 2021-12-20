@@ -5,25 +5,24 @@ import java.util.List;
 import java.util.Random;
 
 public enum Item implements Serializable {
-	SCREW("Screw"),
-	GEAR("Gear"),
-	BOLT("Bolt");
+    SCREW("Screw"),
+    GEAR("Gear"),
+    BOLT("Bolt");
 
-	private final String name;
-	private static final Random rand = new Random();
+    public static final List<Item> ITEMS = List.of(values());
+    public static final int SIZE = ITEMS.size();
+    private static final Random rand = new Random();
+    private final String name;
 
-	public static final List<Item> ITEMS = List.of(values());
-	public static final int SIZE = ITEMS.size();
+    Item(String name) {
+        this.name = name;
+    }
 
-	private Item(String name) {
-		this.name = name;
-	}
+    public static Item randomItem() {
+        return ITEMS.get(rand.nextInt(SIZE));
+    }
 
-	public String getName() {
-		return name;
-	}
-
-	public static Item randomItem() {
-		return ITEMS.get(rand.nextInt(SIZE));
-	}
+    public String getName() {
+        return name;
+    }
 }

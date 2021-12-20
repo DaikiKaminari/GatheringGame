@@ -13,12 +13,10 @@ import java.rmi.RemoteException;
 public class Client {
 
 
+    private final Joueur joueur;
+    private final Jeu jeu;
+    private final ControleurJoueur ctrlJoueur;
     private double elapsed;
-
-    private Joueur joueur;
-
-    private Jeu jeu;
-    private ControleurJoueur ctrlJoueur;
 
 
     Client(Jeu jeu, Joueur joueur) {
@@ -29,14 +27,14 @@ public class Client {
 
     public static void main(String[] args) {
         try {
-            Matchmaking matchmaking = (Matchmaking) Naming.lookup(Server.URL+"/jeuImpl");
+            Matchmaking matchmaking = (Matchmaking) Naming.lookup(Server.URL + "/jeuImpl");
             Jeu jeu = matchmaking.getJeu();
             Joueur j = jeu.join(); // 1er joueur
-             jeu.join(); // 2ème joueur TEST
-             jeu.join(); // 3ème joueur TEST
-             jeu.join(); // 4ème joueur TEST
+            jeu.join(); // 2ème joueur TEST
+            jeu.join(); // 3ème joueur TEST
+            jeu.join(); // 4ème joueur TEST
 
-            while(j == null) { // Si notre joueur est réfusé car plus de place, alors on essaie à nouveau de trouver une nouvelle partie et de la rejoindre.
+            while (j == null) { // Si notre joueur est réfusé car plus de place, alors on essaie à nouveau de trouver une nouvelle partie et de la rejoindre.
                 jeu = matchmaking.getJeu();
                 j = jeu.join();
             }
@@ -52,7 +50,7 @@ public class Client {
 
             double timePrev = System.currentTimeMillis();
 
-            for(;;) {
+            for (; ; ) {
                 double timeNow = System.currentTimeMillis();
                 c.setElapsedTime(timeNow - timePrev);
 
@@ -74,25 +72,29 @@ public class Client {
 
     private void updateGame() throws RemoteException {
 
-        if(!jeu.aCommence()) // ne rien faire si la partie n'a pas commencé
+        if (!jeu.aCommence()) // ne rien faire si la partie n'a pas commencé
             return;
 
-        if(jeu.estFini()) {
-            if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
+        if (jeu.estFini()) {
+            if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
                 joueur.setPret(true);
             }
             return;
         }
 
-        if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.DROITE)) {
+        if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.DROITE)) {
             joueur.moveX(joueur.getSpeed() * this.elapsed);
-        } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.GAUCHE)) {
-            joueur.moveX(- joueur.getSpeed() * this.elapsed);
-        } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.HAUT)) {
-            joueur.moveY(- joueur.getSpeed() * this.elapsed);
-        } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.BAS)) {
+        }
+        if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.GAUCHE)) {
+            joueur.moveX(-joueur.getSpeed() * this.elapsed);
+        }
+        if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.HAUT)) {
+            joueur.moveY(-joueur.getSpeed() * this.elapsed);
+        }
+        if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.BAS)) {
             joueur.moveY(joueur.getSpeed() * this.elapsed);
-        } if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
+        }
+        if (this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
             ctrlJoueur.setStatus(ControleurJoueur.Action.INTERRACTION, false); // pour éviter que l'action se répète plusieurs fois.
             joueur.interraction();
         }

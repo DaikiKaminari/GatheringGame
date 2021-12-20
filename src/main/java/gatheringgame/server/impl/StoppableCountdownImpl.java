@@ -9,10 +9,10 @@ import java.util.TimerTask;
 
 public class StoppableCountdownImpl implements StoppableCountdown {
 
-    private boolean enRoute;
     private final int secondes;
+    private final Timer timer;
+    private boolean enRoute;
     private int secondesRestantes;
-    private Timer timer;
     private Jeu jeu;
 
     StoppableCountdownImpl(int secondes) {
@@ -21,6 +21,7 @@ public class StoppableCountdownImpl implements StoppableCountdown {
         secondesRestantes = secondes;
         timer = new Timer();
     }
+
     StoppableCountdownImpl(int secondes, Jeu jeu) {
         this(secondes);
         this.jeu = jeu;
@@ -43,10 +44,9 @@ public class StoppableCountdownImpl implements StoppableCountdown {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(secondesRestantes > 0) {
+                if (secondesRestantes > 0) {
                     secondesRestantes--;
-                }
-                else {
+                } else {
                     try {
                         jeu.finir();
                     } catch (RemoteException e) {

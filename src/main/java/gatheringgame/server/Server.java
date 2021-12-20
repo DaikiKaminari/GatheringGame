@@ -1,6 +1,5 @@
 package gatheringgame.server;
 
-import gatheringgame.server.impl.JeuImpl;
 import gatheringgame.server.impl.MatchmakingImpl;
 
 import java.net.MalformedURLException;
@@ -11,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 public class Server {
     private static final int PORT = 8080;
     public static final String URL = "rmi://localhost:" + PORT;
+
     public static void main(String[] args) {
         try {
             LocateRegistry.createRegistry(PORT);

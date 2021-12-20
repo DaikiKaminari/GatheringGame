@@ -16,7 +16,7 @@ public class ControleurJoueur implements KeyListener {
         this.actions = new EnumMap<>(Action.class);
         interacting = false;
 
-        for(Action action : Action.values()) {
+        for (Action action : Action.values()) {
             this.actions.put(action, false);
         }
 
@@ -61,7 +61,9 @@ public class ControleurJoueur implements KeyListener {
         this.interacting = interacting;
     }
 
-    public void setStatus(Action e, boolean status) { this.actions.put(e, status); }
+    public void setStatus(Action e, boolean status) {
+        this.actions.put(e, status);
+    }
 
     public enum Action {
         HAUT,

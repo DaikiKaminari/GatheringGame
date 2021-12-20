@@ -3,8 +3,6 @@ package gatheringgame.server.impl;
 import gatheringgame.server.StoppableCountdown;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class StoppableCountdownImplTest {
 
     @Test

@@ -11,19 +11,18 @@ import java.util.List;
 public class EquipeImpl extends UnicastRemoteObject implements Equipe {
 
     public static final int JOUEUR_PAR_EQUIPE = 5;
+    private final int numero; // 1 ou 2
+    private final List<Joueur> joueurs;
     private int score;
-    private int numero; // 1 ou 2
-    private List<Joueur> joueurs;
 
     /**
-     *
      * @param numero 1 pour équipe 1 et 2 pour équipe 2
      * @throws RemoteException
      */
-    EquipeImpl(int numero) throws RemoteException, Exception {
+    EquipeImpl(int numero) throws Exception {
         joueurs = new ArrayList<>(JOUEUR_PAR_EQUIPE);
         this.score = 0;
-        if(numero != 1 && numero != 2) {
+        if (numero != 1 && numero != 2) {
             throw new Exception("le numéro d'équipe doit être égal à 1 ou 2");
         }
         this.numero = numero;
@@ -41,7 +40,7 @@ public class EquipeImpl extends UnicastRemoteObject implements Equipe {
 
     @Override
     public boolean ajouterJoueur(Joueur j) throws RemoteException {
-        if(joueurs.size() == JOUEUR_PAR_EQUIPE)
+        if (joueurs.size() == JOUEUR_PAR_EQUIPE)
             return false;
         joueurs.add(j);
         return true;

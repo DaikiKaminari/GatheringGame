@@ -8,11 +8,11 @@ import java.rmi.server.UnicastRemoteObject;
 public class JoueurImpl extends UnicastRemoteObject implements Joueur {
 
     public static final double SPEED = 0.2;
-    private Position pos;
     private final Position defaultPos;
     private final Equipe equipe;
-    private Item inventaire;
     private final Jeu jeu;
+    private Position pos;
+    private Item inventaire;
     private boolean pret;
 
     public JoueurImpl(int x, int y, Equipe equipe, Jeu jeu) throws RemoteException {

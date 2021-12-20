@@ -1,10 +1,14 @@
 package gatheringgame.server;
 
 public interface StoppableCountdown {
-    public int getSecondesRestantes();
-    public void pause();
-    public void start();
-    public void reset();
-    public boolean enRoute();
+    int getSecondesRestantes();
+
+    void pause();
+
+    void start();
+
+    void reset();
+
+    boolean enRoute();
 
 }

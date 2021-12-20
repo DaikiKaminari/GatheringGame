@@ -12,24 +12,21 @@ import java.util.*;
 public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     public static final int SECONDES = 120;
-    private int nbJoueur;
-    private Map<Integer, Joueur> joueurs;
-    private Equipe equipeUn;
-    private Equipe equipeDeux;
+    private static Map<?, ?> config;
+    private final Map<Integer, Joueur> joueurs;
+    private final Equipe equipeUn;
+    private final Equipe equipeDeux;
     private final Position minPos;
     private final Position maxPos;
+    private final GeneratorImpl resourceGenerator;
+    private final Map<Integer, Integer> posXJoueur;
+    private final Map<Integer, Integer> posYJoueur;
+    private int nbJoueur;
     private Usine usine;
     private List<Resource> ressources;
     private boolean started;
     private boolean isFinished;
     private StoppableCountdown countdown;
-    private final GeneratorImpl resourceGenerator;
-
-    private Map<Integer, Integer> posXJoueur;
-    private Map<Integer, Integer> posYJoueur;
-
-
-    private static Map<?, ?> config;
 
     public JeuImpl() throws Exception {
         config = new Gson().fromJson(
@@ -41,8 +38,8 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         joueurs = new HashMap<Integer, Joueur>();
         equipeUn = new EquipeImpl(1);
         equipeDeux = new EquipeImpl(2);
-        minPos = new PositionImpl((double)config.get("mapMinX"), (double)config.get("mapMinY"));
-        maxPos = new PositionImpl((double)config.get("mapMaxX"), (double)config.get("mapMaxY"));
+        minPos = new PositionImpl((double) config.get("mapMinX"), (double) config.get("mapMinY"));
+        maxPos = new PositionImpl((double) config.get("mapMaxX"), (double) config.get("mapMaxY"));
         ressources = new ArrayList<>();
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
@@ -73,14 +70,14 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     @Override
     public synchronized Joueur join() throws RemoteException {
 
-        if(nbJoueur==Matchmaking.NB_MAX_JOUEUR)
+        if (nbJoueur == Matchmaking.NB_MAX_JOUEUR)
             return null;
 
         Joueur j = new JoueurImpl(posXJoueur.get(nbJoueur), posYJoueur.get(nbJoueur), nbJoueur % 2 == 0 ? equipeUn : equipeDeux, this);
         joueurs.put(nbJoueur, j);
         nbJoueur++;
 
-        if(nbJoueur == Matchmaking.NB_MAX_JOUEUR) {
+        if (nbJoueur == Matchmaking.NB_MAX_JOUEUR) {
             this.commenceJeu();
         }
 
@@ -151,10 +148,10 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     @Override
     public Equipe equipeGagnante() throws RemoteException {
-        if(equipeUn.getScore() > equipeDeux.getScore()) {
+        if (equipeUn.getScore() > equipeDeux.getScore()) {
             return equipeUn;
         } else {
-            if(equipeUn.getScore() == equipeDeux.getScore()) {
+            if (equipeUn.getScore() == equipeDeux.getScore()) {
                 return null;
             } else {
                 return equipeDeux;
@@ -165,13 +162,14 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private void commenceJeu() {
         this.started = true;
         this.isFinished = false;
-        if(!resourceGenerator.isAlive())
+        if (!resourceGenerator.isAlive())
             resourceGenerator.start();
         this.countdown.start();
     }
 
     /**
      * Le joueur tente de ramasser la ressource sur laquelle il se trouve
+     *
      * @param j
      * @return true si il a réussi à prendre une ressource, false sinon
      * @throws RemoteException
@@ -194,6 +192,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     /**
      * Le joueur tente de déposer la ressource qu'il a dans son inventaire, soit à l'usine, soit au sol.
+     *
      * @param j Joueur souhaitant déposer la ressource
      * @return true si l'objet a bien été déposé, false sinon
      * @throws Exception
@@ -227,13 +226,13 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     @Override
     public void recommencer() throws RemoteException {
-        for(Joueur j : this.getJoueurs()) {
-            if(!j.estPret()) { // Si un joueur n'est pas prêt, on ne recommence pas la partie
+        for (Joueur j : this.getJoueurs()) {
+            if (!j.estPret()) { // Si un joueur n'est pas prêt, on ne recommence pas la partie
                 return;
             }
         }
 
-        for(Joueur j : this.getJoueurs()) {
+        for (Joueur j : this.getJoueurs()) {
             j.viderInventaire();
             j.setPret(false);
             j.resetPosition();

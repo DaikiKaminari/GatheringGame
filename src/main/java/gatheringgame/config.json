@@ -1,10 +1,10 @@
 {
   "sizePlayer": 30,
-  "sizeResource" : 30,
-  "sizeFactory" : 50,
-  "maxResourcesEachType" : 3,
-  "mapMinX" : 100,
-  "mapMaxX" : 500,
-  "mapMinY" : 100,
-  "mapMaxY" : 500
+  "sizeResource": 30,
+  "sizeFactory": 50,
+  "maxResourcesEachType": 3,
+  "mapMinX": 100,
+  "mapMaxX": 500,
+  "mapMinY": 100,
+  "mapMaxY": 500
 }
