@@ -191,4 +191,12 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
             return true;
         }
     }
+
+    @Override
+    public List<Equipe> getEquipes() throws RemoteException {
+        LinkedList<Equipe> equipes = new LinkedList<Equipe>();
+        equipes.add(equipeUn);
+        equipes.add(equipeDeux);
+        return equipes;
+    }
 }

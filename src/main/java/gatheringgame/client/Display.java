@@ -6,6 +6,7 @@ import gatheringgame.server.impl.Item;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 import java.util.List;
 import java.rmi.RemoteException;
 
@@ -60,6 +61,7 @@ public class Display extends Canvas {
             afficherJoueurs(g);
             afficherCompteARebours(g);
             afficherRessources(g, jeu.getResources());
+            afficherScores(g);
 
         }
 
@@ -98,6 +100,21 @@ public class Display extends Canvas {
     private void resetAffichage(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0,0, WIDTH, HEIGHT);
+    }
+
+    private void afficherScores(Graphics g) throws RemoteException {
+        List<Equipe> equipes = jeu.getEquipes();
+
+        //affichage score équipe 1
+        g.setColor(Color.blue);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("score équipe 1: " + equipes.get(0).getScore() , 0, 20);
+
+        //affichage score équipe 2
+        g.setColor(Color.red);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("score équipe 2: " + equipes.get(1).getScore() , 250, 20);
+
     }
 
 
