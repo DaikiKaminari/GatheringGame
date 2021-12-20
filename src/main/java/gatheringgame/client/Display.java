@@ -181,39 +181,44 @@ public class Display extends Canvas {
         int espaceDemandes = 40;
         int espaceObjets = 40;
 
+
+
+        int demandeXPos = 650;
+        int demandeYPos = 80;
+
         g.setColor(Color.BLUE);
         g.setFont(new Font("Purisa", Font.PLAIN, 10));
-        g.drawString("demande bleue ", (int)usine.getPosition().getX() - 80, (int)usine.getPosition().getY() - espaceDemandes + 20);
+        g.drawString("demande bleue ", demandeXPos - 80, demandeYPos - espaceDemandes + 20);
 
         for(int i = 0; i < demandeEquipeUn.size(); i++) {
             Item item = demandeEquipeUn.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.screwSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.boltSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.gearSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
             }
         }
 
         g.setColor(Color.RED);
         g.setFont(new Font("Purisa", Font.PLAIN, 10));
-        g.drawString("demande rouge ", (int)usine.getPosition().getX() - 80, (int)usine.getPosition().getY() - 2 * espaceDemandes + 20);
+        g.drawString("demande rouge ", demandeXPos - 80, demandeYPos - 2 * espaceDemandes + 20);
         for(int i = 0; i < demandeEquipeDeux.size(); i++) {
             Item item = demandeEquipeDeux.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.screwSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.boltSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.gearSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
             }
         }
