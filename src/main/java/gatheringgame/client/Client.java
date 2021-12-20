@@ -41,7 +41,7 @@ public class Client {
                 j = jeu.join();
             }
 
-            Display d = new Display(jeu);
+            Display d = new Display(jeu, j);
             Window window = new Window(d);
 
             Client c = new Client(jeu, j);
@@ -78,8 +78,12 @@ public class Client {
         if(!jeu.aCommence()) // ne rien faire si la partie n'a pas commencé
             return;
 
-        if(jeu.estFini())
+        if(jeu.estFini()) {
+            if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.INTERRACTION)) {
+                joueur.setPret(true);
+            }
             return;
+        }
 
         if(this.ctrlJoueur.getStatus(ControleurJoueur.Action.DROITE)) {
             joueur.moveX(joueur.getSpeed() * this.elapsed);

@@ -13,8 +13,12 @@ public interface Joueur extends Remote {
     public Equipe getEquipe() throws RemoteException;
     public Item getItem() throws RemoteException;
     public Jeu getJeu() throws  RemoteException;
+    public boolean estPret() throws RemoteException;
+    public void setPret(boolean pret) throws RemoteException;
 
     public void viderInventaire() throws RemoteException;
     public void prendreResource(Resource r) throws RemoteException;
     public void interraction() throws RemoteException;
+
+    public void resetPosition() throws RemoteException;
 }

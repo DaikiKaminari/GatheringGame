@@ -6,6 +6,7 @@ import gatheringgame.server.impl.Item;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 import java.util.List;
 import java.rmi.RemoteException;
 
@@ -13,6 +14,7 @@ public class Display extends Canvas {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private Jeu jeu;
+    private Joueur joueur;
     private BufferStrategy buffer;
 
 
@@ -21,12 +23,13 @@ public class Display extends Canvas {
     private Image boltSprite;
     private Image gearSprite;
 
-    Display(Jeu j) {
+    Display(Jeu j, Joueur joueur) {
         setSize(WIDTH, HEIGHT);
         this.setIgnoreRepaint(true);
         setVisible(true);
 
         jeu = j;
+        this.joueur = joueur;
 
         usineSprite = new ImageIcon("sprites/factory.png").getImage();
 
@@ -53,8 +56,10 @@ public class Display extends Canvas {
         } else  {
             afficherUsine(g, this.jeu.getUsine());
             afficherJoueurs(g);
+            afficherInventaire(g);
             afficherCompteARebours(g);
             afficherRessources(g, jeu.getResources());
+            afficherScores(g);
 
         }
 
@@ -75,12 +80,42 @@ public class Display extends Canvas {
         } else if(gagnante.getNumero() == 2) {
             g.drawString("L'EQUIPE GAGNANTE EST ROUGE AVEC " + gagnante.getScore() + " POINTS !", 250, 260);
         }
+
+        int nbJoueurPret = 0;
+
+        for(Joueur j : jeu.getJoueurs()) {
+            if(j.estPret()) {
+                nbJoueurPret = nbJoueurPret + 1;
+            }
+        }
+
+        g.drawString("TOUCHE ESPACE POUR PRÊT. Joueurs prêts :  " + nbJoueurPret + "/" + jeu.getNbJoueur(), 250, 300);
     }
 
     private void afficherCompteARebours(Graphics g) throws RemoteException {
         g.setColor(Color.red);
         g.setFont(new Font("Purisa", Font.PLAIN, 23));
         g.drawString("secondes restantes : " + jeu.getSecondesRestantes(), 250, 50);
+    }
+
+    private void afficherInventaire(Graphics g) throws RemoteException {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Purisa", Font.PLAIN, 20));
+        g.drawString("INVENTAIRE : ", 10, 575);
+
+        if(joueur.getItem() != null) {
+            switch(joueur.getItem()) {
+                case SCREW:
+                    g.drawImage(this.screwSprite, 150, 555, this);
+                    break;
+                case BOLT:
+                    g.drawImage(this.boltSprite, 150, 555, this);
+                    break;
+                case GEAR:
+                    g.drawImage(this.gearSprite, 150, 555, this);
+                    break;
+            }
+        }
     }
 
 
@@ -93,6 +128,21 @@ public class Display extends Canvas {
     private void resetAffichage(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0,0, WIDTH, HEIGHT);
+    }
+
+    private void afficherScores(Graphics g) throws RemoteException {
+        List<Equipe> equipes = jeu.getEquipes();
+
+        //affichage score équipe 1
+        g.setColor(Color.blue);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("score équipe 1: " + equipes.get(0).getScore() , 0, 20);
+
+        //affichage score équipe 2
+        g.setColor(Color.red);
+        g.setFont(new Font("Purisa", Font.PLAIN, 23));
+        g.drawString("score équipe 2: " + equipes.get(1).getScore() , 250, 20);
+
     }
 
 
@@ -126,31 +176,44 @@ public class Display extends Canvas {
         int espaceDemandes = 40;
         int espaceObjets = 40;
 
+
+
+        int demandeXPos = 650;
+        int demandeYPos = 80;
+
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Purisa", Font.PLAIN, 10));
+        g.drawString("demande bleue ", demandeXPos - 80, demandeYPos - espaceDemandes + 20);
+
         for(int i = 0; i < demandeEquipeUn.size(); i++) {
             Item item = demandeEquipeUn.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.screwSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.boltSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - espaceDemandes, this);
+                    g.drawImage(this.gearSprite, demandeXPos + i * espaceObjets, demandeYPos - espaceDemandes, this);
                     break;
             }
         }
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Purisa", Font.PLAIN, 10));
+        g.drawString("demande rouge ", demandeXPos - 80, demandeYPos - 2 * espaceDemandes + 20);
         for(int i = 0; i < demandeEquipeDeux.size(); i++) {
             Item item = demandeEquipeDeux.get(i);
             switch(item) {
                 case SCREW:
-                    g.drawImage(this.screwSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.screwSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
                 case BOLT:
-                    g.drawImage(this.boltSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.boltSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
                 case GEAR:
-                    g.drawImage(this.gearSprite, (int)usine.getPosition().getX() + i * espaceObjets, (int)usine.getPosition().getY() - 2 * espaceDemandes, this);
+                    g.drawImage(this.gearSprite, demandeXPos + i * espaceObjets, demandeYPos - 2 * espaceDemandes, this);
                     break;
             }
         }

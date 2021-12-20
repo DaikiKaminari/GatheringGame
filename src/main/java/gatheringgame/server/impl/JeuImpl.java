@@ -11,6 +11,7 @@ import java.util.*;
 
 public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
+    public static final int SECONDES = 120;
     private int nbJoueur;
     private Map<Integer, Joueur> joueurs;
     private Equipe equipeUn;
@@ -18,7 +19,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private final Position minPos;
     private final Position maxPos;
     private Usine usine;
-    private final List<Resource> ressources;
+    private List<Resource> ressources;
     private boolean started;
     private boolean isFinished;
     private StoppableCountdown countdown;
@@ -42,7 +43,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
-        countdown = new StoppableCountdownImpl(60, this); // 2 minutes
+        countdown = new StoppableCountdownImpl(SECONDES, this); // 2 minutes
         resourceGenerator = new GeneratorImpl(this, minPos, maxPos);
 
         this.started = false;
@@ -143,7 +144,9 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     private void commenceJeu() {
         this.started = true;
-        resourceGenerator.start();
+        this.isFinished = false;
+        if(!resourceGenerator.isAlive())
+            resourceGenerator.start();
         this.countdown.start();
     }
 
@@ -192,5 +195,39 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
             j.viderInventaire();
             return true;
         }
+    }
+
+    @Override
+    public List<Equipe> getEquipes() throws RemoteException {
+        LinkedList<Equipe> equipes = new LinkedList<Equipe>();
+        equipes.add(equipeUn);
+        equipes.add(equipeDeux);
+        return equipes;
+    }
+
+    @Override
+    public void recommencer() throws RemoteException {
+        for(Joueur j : this.getJoueurs()) {
+            if(!j.estPret()) { // Si un joueur n'est pas prêt, on ne recommence pas la partie
+                return;
+            }
+        }
+
+        for(Joueur j : this.getJoueurs()) {
+            j.viderInventaire();
+            j.setPret(false);
+            j.resetPosition();
+        }
+
+        ressources = new ArrayList<>();
+        usine = new UsineImpl(this);
+        usine.ajouterEquipe(equipeUn);
+        usine.ajouterEquipe(equipeDeux);
+        countdown = new StoppableCountdownImpl(SECONDES, this); // 2 minutes
+        equipeUn.resetScore();
+        equipeDeux.resetScore();
+
+        this.commenceJeu();
+
     }
 }
