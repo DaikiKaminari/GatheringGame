@@ -53,7 +53,6 @@ public class Client {
             double timePrev = System.currentTimeMillis();
 
             for(;;) {
-
                 double timeNow = System.currentTimeMillis();
                 c.setElapsedTime(timeNow - timePrev);
 

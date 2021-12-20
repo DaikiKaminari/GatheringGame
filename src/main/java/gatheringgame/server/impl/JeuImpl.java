@@ -96,6 +96,9 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         synchronized (ressources) {
             this.ressources.remove(resource);
         }
+        synchronized (resourceGenerator) {
+            resourceGenerator.notify();
+        }
     }
 
     @Override

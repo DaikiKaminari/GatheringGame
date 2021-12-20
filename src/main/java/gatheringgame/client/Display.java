@@ -58,7 +58,9 @@ public class Display extends Canvas {
             afficherJoueurs(g);
             afficherInventaire(g);
             afficherCompteARebours(g);
-            afficherRessources(g, jeu.getResources());
+            synchronized (jeu.getResources()) {
+                afficherRessources(g, jeu.getResources());
+            }
             afficherScores(g);
 
         }
