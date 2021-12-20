@@ -23,5 +23,7 @@ public interface Jeu extends Remote {
     public boolean veutRamasser(Joueur j) throws RemoteException;
     public boolean veutDeposer(Joueur j) throws RemoteException;
 
+    public void recommencer() throws RemoteException;
+
     public List<Equipe> getEquipes() throws RemoteException;
 }

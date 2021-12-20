@@ -22,7 +22,7 @@ public class Display extends Canvas {
     private Image boltSprite;
     private Image gearSprite;
 
-    Display(Jeu j) {
+    Display(Jeu j, Joueur joueur) {
         setSize(WIDTH, HEIGHT);
         this.setIgnoreRepaint(true);
         setVisible(true);
@@ -82,6 +82,16 @@ public class Display extends Canvas {
         } else if(gagnante.getNumero() == 2) {
             g.drawString("L'EQUIPE GAGNANTE EST ROUGE AVEC " + gagnante.getScore() + " POINTS !", 250, 260);
         }
+
+        int nbJoueurPret = 0;
+
+        for(Joueur j : jeu.getJoueurs()) {
+            if(j.estPret()) {
+                nbJoueurPret = nbJoueurPret + 1;
+            }
+        }
+
+        g.drawString("TOUCHE ESPACE POUR PRÊT. Joueurs prêts :  " + nbJoueurPret + "/" + jeu.getNbJoueur(), 250, 300);
     }
 
     private void afficherCompteARebours(Graphics g) throws RemoteException {
@@ -148,6 +158,10 @@ public class Display extends Canvas {
         int espaceDemandes = 40;
         int espaceObjets = 40;
 
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Purisa", Font.PLAIN, 10));
+        g.drawString("demande bleue ", (int)usine.getPosition().getX() - 80, (int)usine.getPosition().getY() - espaceDemandes + 20);
+
         for(int i = 0; i < demandeEquipeUn.size(); i++) {
             Item item = demandeEquipeUn.get(i);
             switch(item) {
@@ -162,6 +176,10 @@ public class Display extends Canvas {
                     break;
             }
         }
+
+        g.setColor(Color.RED);
+        g.setFont(new Font("Purisa", Font.PLAIN, 10));
+        g.drawString("demande rouge ", (int)usine.getPosition().getX() - 80, (int)usine.getPosition().getY() - 2 * espaceDemandes + 20);
         for(int i = 0; i < demandeEquipeDeux.size(); i++) {
             Item item = demandeEquipeDeux.get(i);
             switch(item) {

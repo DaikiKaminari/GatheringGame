@@ -8,13 +8,17 @@ import java.rmi.server.UnicastRemoteObject;
 public class JoueurImpl extends UnicastRemoteObject implements Joueur {
 
     public static final double SPEED = 0.2;
-    private final Position pos;
+    private Position pos;
+    private final Position defaultPos;
     private final Equipe equipe;
     private Item inventaire;
     private final Jeu jeu;
+    private boolean pret;
 
     public JoueurImpl(int x, int y, Equipe equipe, Jeu jeu) throws RemoteException {
-        this.pos = new PositionImpl(x, y);
+        this.defaultPos = new PositionImpl(x, y);
+        this.pos = defaultPos.clonePos();
+        this.pret = false;
         this.equipe = equipe;
         this.inventaire = null;
         this.equipe.ajouterJoueur(this);
@@ -57,6 +61,17 @@ public class JoueurImpl extends UnicastRemoteObject implements Joueur {
     }
 
     @Override
+    public boolean estPret() throws RemoteException {
+        return pret;
+    }
+
+    @Override
+    public void setPret(boolean pret) throws RemoteException {
+        this.pret = pret;
+        jeu.recommencer();
+    }
+
+    @Override
     public void viderInventaire() throws RemoteException {
         this.inventaire = null;
     }
@@ -73,5 +88,10 @@ public class JoueurImpl extends UnicastRemoteObject implements Joueur {
         } else {
             jeu.veutDeposer(this);
         }
+    }
+
+    @Override
+    public void resetPosition() throws RemoteException {
+        this.pos = defaultPos.clonePos();
     }
 }
