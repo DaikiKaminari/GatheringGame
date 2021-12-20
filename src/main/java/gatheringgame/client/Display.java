@@ -14,6 +14,7 @@ public class Display extends Canvas {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private Jeu jeu;
+    private Joueur joueur;
     private BufferStrategy buffer;
 
 
@@ -28,6 +29,7 @@ public class Display extends Canvas {
         setVisible(true);
 
         jeu = j;
+        this.joueur = joueur;
 
         usineSprite = new ImageIcon("sprites/factory.png").getImage();
 
@@ -59,6 +61,7 @@ public class Display extends Canvas {
 
             afficherUsine(g, this.jeu.getUsine());
             afficherJoueurs(g);
+            afficherInventaire(g);
             afficherCompteARebours(g);
             afficherRessources(g, jeu.getResources());
             afficherScores(g);
@@ -98,6 +101,26 @@ public class Display extends Canvas {
         g.setColor(Color.red);
         g.setFont(new Font("Purisa", Font.PLAIN, 23));
         g.drawString("secondes restantes : " + jeu.getSecondesRestantes(), 250, 50);
+    }
+
+    private void afficherInventaire(Graphics g) throws RemoteException {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Purisa", Font.PLAIN, 20));
+        g.drawString("INVENTAIRE : ", 10, 575);
+
+        if(joueur.getItem() != null) {
+            switch(joueur.getItem()) {
+                case SCREW:
+                    g.drawImage(this.screwSprite, 150, 555, this);
+                    break;
+                case BOLT:
+                    g.drawImage(this.boltSprite, 150, 555, this);
+                    break;
+                case GEAR:
+                    g.drawImage(this.gearSprite, 150, 555, this);
+                    break;
+            }
+        }
     }
 
 
