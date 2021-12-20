@@ -25,6 +25,10 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
     private StoppableCountdown countdown;
     private final GeneratorImpl resourceGenerator;
 
+    private Map<Integer, Integer> posXJoueur;
+    private Map<Integer, Integer> posYJoueur;
+
+
     private static Map<?, ?> config;
 
     public JeuImpl() throws Exception {
@@ -45,6 +49,20 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine.ajouterEquipe(equipeDeux);
         countdown = new StoppableCountdownImpl(SECONDES, this); // 2 minutes
         resourceGenerator = new GeneratorImpl(this, minPos, maxPos);
+        posXJoueur = new HashMap<>();
+        posYJoueur = new HashMap<>();
+
+        posXJoueur.put(0, 100);
+        posYJoueur.put(0, 200);
+
+        posXJoueur.put(2, 100);
+        posYJoueur.put(2, 400);
+
+        posXJoueur.put(1, 700);
+        posYJoueur.put(1, 200);
+
+        posXJoueur.put(3, 700);
+        posYJoueur.put(3, 400);
 
         this.started = false;
         this.isFinished = false;
@@ -58,7 +76,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         if(nbJoueur==Matchmaking.NB_MAX_JOUEUR)
             return null;
 
-        Joueur j = new JoueurImpl(50, 50, nbJoueur % 2 == 0 ? equipeUn : equipeDeux, this);
+        Joueur j = new JoueurImpl(posXJoueur.get(nbJoueur), posYJoueur.get(nbJoueur), nbJoueur % 2 == 0 ? equipeUn : equipeDeux, this);
         joueurs.put(nbJoueur, j);
         nbJoueur++;
 
