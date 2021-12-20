@@ -13,8 +13,8 @@ public class UsineImpl extends UnicastRemoteObject implements Usine {
 
 
     public static final int NB_RESOURCE_DEMANDE = 3;
-    public static final int DEFAULT_X_POS = 400;
-    public static final int DEFAULT_Y_POS = 300;
+    public static final int DEFAULT_X_POS = 340;
+    public static final int DEFAULT_Y_POS = 250;
 
     Map<Equipe, List<Item>> demandes;
     Position position;
