@@ -155,10 +155,11 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
      */
     @Override
     public boolean veutRamasser(Joueur j) throws RemoteException {
-        double maxRadiusPlayerPickupResource = (double) config.get("radiusPlayer");
+        double sizePlayer = (double) config.get("sizePlayer");
+        double sizeResource = (double) config.get("sizeResource");
         synchronized (ressources) {
             for (Resource r : ressources) {
-                if (Position.isOverlapping(j.getPos(), r.getPos(), maxRadiusPlayerPickupResource)) {
+                if (Position.isOverlapping(j.getPos(), r.getPos(), (int) sizePlayer, (int) sizeResource)) {
                     j.prendreResource(r);
                     retirerResource(r);
                     return true;
@@ -177,11 +178,12 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
     @Override
     public boolean veutDeposer(Joueur j) throws RemoteException {
-        double maxRadiusPlayerPickupResource = (double) config.get("radiusPlayer");
+        double sizePlayer = (double) config.get("sizePlayer");
+        double sizeFactory = (double) config.get("sizeFactory");
         if (j.getItem() == null) {
             return false;
         }
-        if (Position.isOverlapping(j.getPos(), usine.getPosition(), maxRadiusPlayerPickupResource)) {
+        if (Position.isOverlapping(j.getPos(), usine.getPosition(), (int) sizePlayer, (int) sizeFactory)) {
             // tente de donner l'item à l'usine pour compléter la tâche
             return usine.satisfaireDemande(j);
         } else {

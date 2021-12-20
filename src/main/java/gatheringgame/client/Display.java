@@ -33,8 +33,6 @@ public class Display extends Canvas {
         screwSprite = new ImageIcon("sprites/screw.png").getImage();
         boltSprite = new ImageIcon("sprites/bolt.png").getImage();
         gearSprite = new ImageIcon("sprites/gear.png").getImage();
-
-
     }
 
     public void makeBufferStrategy() {
@@ -48,14 +46,11 @@ public class Display extends Canvas {
 
         resetAffichage(g);
 
-
-
         if(!jeu.aCommence()) { 
             this.afficherAttente(g);
         } else if(jeu.estFini()) {
             this.afficherResultat(g);
         } else  {
-
             afficherUsine(g, this.jeu.getUsine());
             afficherJoueurs(g);
             afficherCompteARebours(g);
@@ -118,8 +113,8 @@ public class Display extends Canvas {
         } else {
             g.setColor(Color.red);
         }
-        int pR = (int)((double)jeu.getConfig().get("radiusPlayer"));
-        g.drawRect((int)joueur.getPos().getX()-pR, (int)joueur.getPos().getY()-pR, pR*2, pR*2);
+        int sizePlayer = (int)((double)jeu.getConfig().get("sizePlayer"));
+        g.drawRect((int)joueur.getPos().getX(), (int)joueur.getPos().getY(), sizePlayer, sizePlayer);
     }
 
     private void afficherUsine(Graphics g, Usine usine) throws RemoteException {
