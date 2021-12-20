@@ -1,4 +1,5 @@
 {
+  "gameDuration" : 60,
   "sizePlayer": 30,
   "sizeResource": 30,
   "sizeFactory": 50,

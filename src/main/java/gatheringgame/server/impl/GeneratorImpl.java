@@ -66,7 +66,7 @@ public class GeneratorImpl extends Thread implements Generator {
                 }
             }
         } catch (RemoteException | InterruptedException e) {
-            // (RemoteException) : N'est pas censé arriver car c'est une méthode exécutée uniquement côté serveur
+            // (RemoteException) : N'est pas censé arriver, car c'est une méthode exécutée uniquement côté serveur
             e.printStackTrace();
             Thread.currentThread().interrupt();
         }

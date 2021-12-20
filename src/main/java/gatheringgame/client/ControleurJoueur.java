@@ -10,11 +10,9 @@ public class ControleurJoueur implements KeyListener {
 
     private final Map<Action, Boolean> actions;
     private final Map<Integer, Action> bind;
-    private boolean interacting;
 
     ControleurJoueur() {
         this.actions = new EnumMap<>(Action.class);
-        interacting = false;
 
         for (Action action : Action.values()) {
             this.actions.put(action, false);
@@ -39,26 +37,22 @@ public class ControleurJoueur implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         Action action = this.bind.get(key);
-        actions.put(action, true);
+        if (action != null) {
+            actions.put(action, true);
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         Action action = this.bind.get(key);
-        actions.put(action, false);
+        if (action != null) {
+            actions.put(action, false);
+        }
     }
 
     public boolean getStatus(Action e) {
         return this.actions.get(e);
-    }
-
-    public boolean interacting() {
-        return interacting;
-    }
-
-    public void setInteracting(boolean interacting) {
-        this.interacting = interacting;
     }
 
     public void setStatus(Action e, boolean status) {

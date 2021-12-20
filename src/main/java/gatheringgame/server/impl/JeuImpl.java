@@ -11,7 +11,6 @@ import java.util.*;
 
 public class JeuImpl extends UnicastRemoteObject implements Jeu {
 
-    public static final int SECONDES = 120;
     private static Map<?, ?> config;
     private final Map<Integer, Joueur> joueurs;
     private final Equipe equipeUn;
@@ -44,7 +43,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
-        countdown = new StoppableCountdownImpl(SECONDES, this); // 2 minutes
+        countdown = new StoppableCountdownImpl((int)((double) config.get("gameDuration")), this); // 2 minutes
         resourceGenerator = new GeneratorImpl(this, minPos, maxPos);
         posXJoueur = new HashMap<>();
         posYJoueur = new HashMap<>();
@@ -242,7 +241,7 @@ public class JeuImpl extends UnicastRemoteObject implements Jeu {
         usine = new UsineImpl(this);
         usine.ajouterEquipe(equipeUn);
         usine.ajouterEquipe(equipeDeux);
-        countdown = new StoppableCountdownImpl(SECONDES, this); // 2 minutes
+        countdown = new StoppableCountdownImpl((int)((double) config.get("gameDuration")), this); // 2 minutes
         equipeUn.resetScore();
         equipeDeux.resetScore();
 
